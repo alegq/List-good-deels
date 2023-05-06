@@ -1,12 +1,14 @@
 import {Dispatch} from "react";
-import {UserAction, UserActionTypes} from "@/types/user";
+import {IUser, UserAction, UserActionTypes} from "@/types/user";
 import axios from "axios";
+import {ListAction, ListActionTypes} from "@/types/list";
+import {useTypedSelector} from "@/hooks/useTypedSelector";
 
 
-export const fetchTracks = () => {
+export const  fetchUser= () => {
   return async (dispatch:Dispatch<UserAction>) =>{
       try {
-          const response = await axios.get('http://localhost:5000/client')
+          const response = await axios.get('http://localhost:3000/client')
           dispatch({
               type: UserActionTypes.FETCH_USER,
               payload: response.data
@@ -18,3 +20,35 @@ export const fetchTracks = () => {
       }
   }
 }
+
+export const addfetchUser = (name:string, password:string) => {
+    return async (dispatch:Dispatch<UserAction>) =>{
+        const {user, error} = useTypedSelector(state => state.user)
+        try {
+            const response = await axios.post('http://localhost:3000/client',
+                {"name":user.login,
+                'age':password}
+            )
+            dispatch({
+                type: UserActionTypes.ADD_FETCH_USER,
+                payload: response.data
+            })
+        }catch (e){
+            dispatch({
+                type: UserActionTypes.FETCH_USER_ERROR,
+                payload:'Произошла ошибка'})
+        }
+    }
+}
+
+export const addUser = (payload:IUser): UserAction => {
+    console.log(66666)
+    return {type: UserActionTypes.ADD_USER, payload}
+}
+
+export const changeMode = (payload:boolean): UserAction => {
+    return {type: UserActionTypes.CHANGE_MODE, payload}
+}
+
+
+

@@ -7,7 +7,7 @@ const MainLayouts = (props:any) => {
     return (
         <>
             <Navbar/>
-            <Container style={{margin: '20% 20%'}}>
+            <Container style={{margin: '10% 20%'}}>
             {props.children}
             </Container>
 

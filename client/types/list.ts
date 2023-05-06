@@ -17,6 +17,7 @@ interface AddCaseAction {
 
 interface DeleteCaseAction {
     type: ListActionTypes.DELETE
+    payload: number
 }
 
 interface CheckCaseAction {

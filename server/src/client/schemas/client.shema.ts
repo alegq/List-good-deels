@@ -6,10 +6,27 @@ export type ClientDocument = HydratedDocument<Client>;
 @Schema()
 export class Client {
     @Prop()
+    login: string;
+
+    @Prop()
+    password: string;
+
+    @Prop()
     name: string;
 
     @Prop()
-    age: number;
+    teg: string;
+
+    @Prop()
+    list: string[];
+
+    @Prop()
+    friends: string[];
+
+
+
+
+
 
 }
 

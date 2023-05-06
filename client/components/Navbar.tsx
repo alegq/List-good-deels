@@ -15,6 +15,11 @@ import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import {useRouter} from "next/router";
 import {Button, makeStyles} from "@mui/material";
+import {useTypedSelector} from "@/hooks/useTypedSelector";
+import {useActions} from "@/hooks/useActions";
+import {useEffect} from "react";
+import {IUser} from "@/types/user";
+import axios from "axios";
 
 const drawerWidth = 240;
 
@@ -26,6 +31,68 @@ const menuItems = [
 
 export default function Navbar() {
     const router = useRouter();
+
+    const {mode, user} = useTypedSelector(state => state.user) //получаем состояние приложения (0-базовое,1-вход,2-регистрация,3-зашли/зарегестрировались)
+    const {changeMode, addUser} = useActions() //достаем функцию для изменения store
+
+    useEffect(
+        ()=>{
+
+            if((!user._id) && JSON.parse(window.localStorage.getItem('user'))){
+                const hashUser : string|null =JSON.parse(window.localStorage.getItem('user') || '')
+                let userDate: IUser;
+
+                try {
+                    const response = axios.get('http://localhost:3000/client/'+hashUser._id)
+                        .then(response => {
+                            if (response.data.login == hashUser.login && response.data.password == hashUser.password){
+                                userDate = {
+                                    '_id':response.data._id,
+                                    'login': response.data.login,
+                                    'password': response.data.password,
+                                    'name': response.data.name,
+                                    'teg': response.data.teg,
+                                    'list': response.data.list,
+                                    'friends': response.data.friends
+                                }
+                                console.log('вход через localstorege');
+                                addUser(userDate);
+                                changeMode(true);
+                            }
+                        })
+                }
+                catch (e) {
+                    console.log(e)
+                }
+            }
+        },
+        []
+    );
+
+    //функиции обработчика события onClick для кнопок 'LOG IN'/'SING UP'
+    const logIn = () => {
+        router.push('/login/log_in');
+    }
+    const sing = () => {
+        router.push('/login/sing_up');
+    }
+    const logOut = () => {
+       addUser(
+            {
+                '_id':'',
+                'login': '',
+                'password': '',
+                'name': '',
+                'teg': '',
+                'list': [],
+                'friends': []
+            }
+        )
+        changeMode(false)
+        window.localStorage.removeItem('user')
+        router.push('/');
+    }
+
     return (
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
@@ -35,13 +102,22 @@ export default function Navbar() {
             >
                 <Toolbar>
                     <Typography variant="h6" noWrap component="div">
-                        Permanent drawer
+                        List of good deeds
                     </Typography>
+                    {
+                        (!mode)&&
+                        <Button style={{marginLeft: 'auto', marginRight:'1%'}} color="secondary"  variant="contained" onClick={logIn}>Log In</Button>
+                    }
+                    {
+                        (!mode)&&
+                        <Button  color="secondary"  variant="contained" onClick={sing}>Sign up</Button>
+                    }
+                    {
+                        (mode)&&
+                        <Button style={{marginLeft: 'auto'}} color="secondary" variant="contained" onClick={logOut}>Выйти</Button>
+                    }
 
-                    <Box m={2}>
-                        <Button color="inherit" variant="outlined">Log In</Button>
-                    </Box>
-                    <Button color="secondary" variant="contained">Sign up</Button>
+
                 </Toolbar>
 
             </AppBar>
@@ -62,8 +138,8 @@ export default function Navbar() {
                 <Divider />
                 <List>
                     {menuItems.map(({text, href}, index) => (
-                        <ListItem key={text} disablePadding onClick={()=>router.push(href)}>
-                            <ListItemButton>
+                        <ListItem  key={text} disablePadding onClick={()=>router.push(href)}>
+                            <ListItemButton disabled={!mode}>
                                 <ListItemIcon>
                                     {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
                                 </ListItemIcon>

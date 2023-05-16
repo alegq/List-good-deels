@@ -1,11 +1,10 @@
-import React, {useEffect, useState} from 'react';
+//компанент для отображения всего списка хороших дел
+import React, {useState} from 'react';
 import {useTypedSelector} from "@/hooks/useTypedSelector";
 import {useActions} from "@/hooks/useActions";
 import {Box, Button, Grid} from "@mui/material";
 import Case from "@/components/Case";
-import {addUser, fetchUser} from "@/store/actions-creators/user";
 import axios from "axios";
-
 
 const ListGoodDeels = () => {
     const [inputText, setInputText] = useState('');
@@ -40,7 +39,6 @@ const ListGoodDeels = () => {
         newList.splice(code-1,1);
         updateList(newList)
     }
-
 
     const ListComponent:any = user.list.map((element, index)=>
         <Case key={index} text={element} code={index+1} cbDeletCase={deleteCase}/>

@@ -1,7 +1,6 @@
 import {Dispatch} from "react";
 import {IUser, UserAction, UserActionTypes} from "@/types/user";
 import axios from "axios";
-import {ListAction, ListActionTypes} from "@/types/list";
 import {useTypedSelector} from "@/hooks/useTypedSelector";
 
 
@@ -42,7 +41,6 @@ export const addfetchUser = (name:string, password:string) => {
 }
 
 export const addUser = (payload:IUser): UserAction => {
-    console.log(66666)
     return {type: UserActionTypes.ADD_USER, payload}
 }
 

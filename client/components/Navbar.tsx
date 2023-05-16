@@ -1,3 +1,4 @@
+//компонет для создания меню страниц
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
@@ -14,7 +15,7 @@ import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import {useRouter} from "next/router";
-import {Button, makeStyles} from "@mui/material";
+import {Button} from "@mui/material";
 import {useTypedSelector} from "@/hooks/useTypedSelector";
 import {useActions} from "@/hooks/useActions";
 import {useEffect} from "react";
@@ -55,7 +56,6 @@ export default function Navbar() {
                                     'list': response.data.list,
                                     'friends': response.data.friends
                                 }
-                                console.log('вход через localstorege');
                                 addUser(userDate);
                                 changeMode(true);
                             }

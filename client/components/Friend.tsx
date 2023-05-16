@@ -1,11 +1,8 @@
+//компанент отображения друга и просмотра списка его дел
 import React, {useState} from 'react';
 import {Button, Card, Grid, IconButton} from "@mui/material";
-import {useTypedSelector} from "@/hooks/useTypedSelector";
-import {useActions} from "@/hooks/useActions";
-import Case from "@/components/Case";
 import styles from "@/styles/Case.module.scss";
 import {Delete} from "@mui/icons-material";
-
 
 type Props = {
     _id : string

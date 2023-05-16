@@ -1,10 +1,8 @@
-import React, {useEffect, useState} from 'react';
+//компонет авторизации
+import React, {useEffect} from 'react';
 import {useInput} from "@/hooks/useInput";
-import axios from "axios";
 import {Button, TextField} from "@mui/material";
-import {addUser, fetchUser} from "@/store/actions-creators/user";
 import {useTypedSelector} from "@/hooks/useTypedSelector";
-import {router} from "next/client";
 import {useRouter} from "next/router";
 import {useActions} from "@/hooks/useActions";
 import {IUser} from "@/types/user";
@@ -13,16 +11,12 @@ const LogInForm = () => {
 
     const router = useRouter() //инициализируем роутер
 
-    const [log, setLog] = useState('');
-    const [passWord, setPassWord] = useState('');
-
-    const {allUsers,user, error} = useTypedSelector(state => state.user)
+    const {allUsers,user} = useTypedSelector(state => state.user)
     const {addUser,changeMode} = useActions()
 
     useEffect(
         ()=>{
             if(user.login == 'login'){
-                console.log(user)
                 router.push('/login')
             }
         },
@@ -34,10 +28,7 @@ const LogInForm = () => {
 
     let userDate:IUser;
 
-    console.log(allUsers)
-
     function AddUser(){
-        //console.log(allUsers[55].password)
         console.log(allUsers)
         allUsers.forEach((element)=>{
            if (element.login == logInp.value && element.password == passWordInp.value){
@@ -64,10 +55,6 @@ const LogInForm = () => {
                return
            }
         })
-    }
-
-    const next = () => {
-      console.log(user)
     }
 
     return (

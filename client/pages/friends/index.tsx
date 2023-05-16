@@ -1,3 +1,4 @@
+// страница списка друзей
 import React, {useEffect, useState} from 'react';
 import MainLayouts from "@/layouts/MainLayouts";
 import {useTypedSelector} from "../../hooks/useTypedSelector";
@@ -5,13 +6,9 @@ import {NextThunkDispatch, wrapper} from "../../store";
 import {addUser, fetchUser} from "../../store/actions-creators/user";
 import {useActions} from "@/hooks/useActions";
 import axios from "axios";
-import Case from "@/components/Case";
 import Friend from "@/components/Friend";
-import {updateData} from "@/hooks/updateData";
 import {useInput} from "@/hooks/useInput";
 import {Box, Button, Card, Grid, TextField} from "@mui/material";
-import {string} from "prop-types";
-import ListGoodDeels from "@/components/ListGoodDeels";
 
 interface IFriend {
     _id : string
@@ -21,9 +18,7 @@ interface IFriend {
 
 const Index = () => {
     const {user, allUsers} = useTypedSelector(state => state.user)
-    const {text} = useTypedSelector(state => state.list)
 
-    //const [update, setUpdate] = useState(true);
     const [friendsId, setFriendsId] = useState<IFriend[]>([]);
     const {addUser} = useActions()
 
@@ -39,10 +34,10 @@ const Index = () => {
     );
 
 
-    const getUser =   () => {
+    const getUser =  () => {
           let preFriends : IFriend[] = [];
-          user.friends.forEach((friendId,index)=>{
-              allUsers.forEach((user,index)=>{
+          user.friends.forEach((friendId)=>{
+              allUsers.forEach((user)=>{
                 if (friendId == user._id) {
                     preFriends.push({_id:user._id, name:user.name, list:user.list})
                 }
@@ -90,7 +85,6 @@ const Index = () => {
         }
     }
 
-
     const FriendsComponent = friendsId.map((element, index)=>
         <div key={index}>
             <Friend key={index} name={element.name}
@@ -126,11 +120,8 @@ const Index = () => {
 };
 export default Index;
 
-
-////////////////////////////
-
 export const getServerSideProps = wrapper.getServerSideProps(
-    store => async (data ) =>
+    store => async ( ) =>
     {
         const dispatch = store.dispatch as NextThunkDispatch;
         await dispatch(fetchUser());

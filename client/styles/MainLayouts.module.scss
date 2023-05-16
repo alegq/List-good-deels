@@ -1,0 +1,21 @@
+
+  @media (max-width: 1200px) {
+   .mainLay{
+    max-width: 970px;
+   }
+  }
+
+  @media (max-width: 992px) {
+   .mainLay{
+    max-width: 750px;
+   }
+  }
+
+  @media (max-width: 767px) {
+   .mainLay{
+    max-width: none;
+   }
+  }
+
+
+

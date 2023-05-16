@@ -31,7 +31,6 @@ export const userReduser = (state=initalState, action:UserAction) : UserState =>
         case UserActionTypes.FETCH_USER:
             return {...state,  allUsers: action.payload}
         case UserActionTypes.ADD_USER:{
-            console.log(999999)
             return {...state, user: action.payload}
         }
 

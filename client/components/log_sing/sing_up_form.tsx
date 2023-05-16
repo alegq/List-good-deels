@@ -1,24 +1,23 @@
+//компанент для регистрации
 import React, {useEffect, useState} from 'react';
 import {useInput} from "@/hooks/useInput";
 import axios from "axios";
 import {Button, TextField} from "@mui/material";
-import {NextThunkDispatch, wrapper} from "@/store";
-import {addUser, fetchUser} from "@/store/actions-creators/user";
 import {useTypedSelector} from "@/hooks/useTypedSelector";
-import {router} from "next/client";
 import {useRouter} from "next/router";
 import {useActions} from "@/hooks/useActions";
-
 
 const SignUpForm = () => {
 
     const router = useRouter() //инициализируем роутер
 
-    const [log, setLog] = useState('');
-    const [passWord, setPassWord] = useState('');
-
-    const {allUsers,user, error} = useTypedSelector(state => state.user)
+    const {user} = useTypedSelector(state => state.user)
     const {addUser,changeMode} = useActions()
+
+    const logInp = useInput('')
+    const passWordInp = useInput('')
+    const nameInp = useInput('')
+    const tegInp = useInput('')
 
     useEffect(
         ()=>{
@@ -29,14 +28,6 @@ const SignUpForm = () => {
         },
         [user]
     );
-
-
-
-    const logInp = useInput('')
-    const passWordInp = useInput('')
-    const nameInp = useInput('')
-    const tegInp = useInput('')
-
 
     function AddUser(){
         axios.post('http://localhost:3000/client',

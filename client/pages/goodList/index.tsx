@@ -1,6 +1,6 @@
+//страница списка дел
 import React from 'react';
 import MainLayouts from "@/layouts/MainLayouts";
-import {useActions} from "@/hooks/useActions";
 import ListGoodDeels from "@/components/ListGoodDeels";
 import {Grid, Card, Box} from "@mui/material";
 

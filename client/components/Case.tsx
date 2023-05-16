@@ -1,10 +1,8 @@
+// компонент для отображения одного case из всего списка хороших дел
 import React from 'react';
-import {Button, Card, IconButton} from "@mui/material";
-import {useTypedSelector} from "@/hooks/useTypedSelector";
-import {useActions} from "@/hooks/useActions";
+import {Card, IconButton} from "@mui/material";
 import styles from "../styles/Case.module.scss"
 import {Delete} from "@mui/icons-material";
-
 
 type Props = {
     text: string;
@@ -13,9 +11,6 @@ type Props = {
 };
 
 const Case:  React.FC<Props>= (props) => {
-
-    const  {text, done} = useTypedSelector(state => state.list);
-    const {addCase,deleteCase,checkCase,addUser} = useActions()
 
     const deleted = () => {
         props.cbDeletCase(props.code)

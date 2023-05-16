@@ -1,5 +1,5 @@
+//hook для обработки полей ввода(input)
 import {useState} from "react";
-
 
 export const useInput = (initialValue) => {
     const [value, setValue] = useState(initialValue)

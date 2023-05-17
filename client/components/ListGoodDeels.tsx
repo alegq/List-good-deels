@@ -27,10 +27,13 @@ const ListGoodDeels = () => {
     }
 
     const addCase = () => {
-        let newList: string[] = [...user.list];
-        newList.push(inputText);
-        updateList(newList);
-        setInputText('');
+        if (inputText !== ''){
+            let newList: string[] = [...user.list];
+            newList.push(inputText);
+            updateList(newList);
+            setInputText('');
+        }
+
     }
 
     const deleteCase = (code:number) => {

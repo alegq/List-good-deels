@@ -48,21 +48,21 @@ const Index = () => {
     }
 
     const addFriend = () => {
+        if (friendInp.value != user.teg ){      //проверка на добавление самого себя в друзья
             allUsers.forEach((userFE,index)=>{
-                if (friendInp.value == userFE.teg) {
-                    console.log(userFE._id)
+                if (friendInp.value == userFE.teg && !user.friends.includes(userFE._id)) { //...&& не является ли уже другом
                     let newListFriend: string[] = [...user.friends];
                     newListFriend.push(userFE._id);
                     updateFriends(newListFriend)
                 }
             })
+        }
+
     }
 
     const deletFriend = (idFriend) => {
-        console.log(idFriend)
         user.friends.forEach((friend,index)=>{
             if (idFriend == friend) {
-                console.log(friend)
                 let newListFriend: string[] = [...user.friends];
                 newListFriend.splice(index,1);
                 updateFriends(newListFriend)
@@ -76,7 +76,6 @@ const Index = () => {
         try {
             axios.put(url_id,{
                     "case":user.list,
-                    //"friend": [...user.friends,newFriend]
                     "friend": newFriend
                 }
             ).then(response => {addUser(response.data)});

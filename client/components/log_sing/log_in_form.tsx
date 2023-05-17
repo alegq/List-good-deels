@@ -1,5 +1,5 @@
 //компонет авторизации
-import React, {useEffect} from 'react';
+import React, { useEffect, useState } from 'react';
 import {useInput} from "@/hooks/useInput";
 import {Button, TextField} from "@mui/material";
 import {useTypedSelector} from "@/hooks/useTypedSelector";
@@ -13,6 +13,8 @@ const LogInForm = () => {
 
     const {allUsers,user} = useTypedSelector(state => state.user)
     const {addUser,changeMode} = useActions()
+
+    const [checklogPass, setChecklogPass] = useState(false); // при true отоброжаем сообщение о неправильных данных авторизации
 
     useEffect(
         ()=>{
@@ -29,7 +31,6 @@ const LogInForm = () => {
     let userDate:IUser;
 
     function AddUser(){
-        console.log(allUsers)
         allUsers.forEach((element)=>{
            if (element.login == logInp.value && element.password == passWordInp.value){
                console.log('успешный вход')
@@ -55,6 +56,7 @@ const LogInForm = () => {
                return
            }
         })
+        setChecklogPass(true)
     }
 
     return (
@@ -74,6 +76,10 @@ const LogInForm = () => {
             <br/>
 
             <Button onClick={AddUser}>ВОЙТИ</Button>
+            {
+              (checklogPass)&&
+              <h6 style={{color: 'red'}}>Логин или пароль введен не верно</h6>
+            }
 
         </div>
     );

@@ -1,17 +1,22 @@
+ .mainLay{
+  max-width: 970px;
+  padding-left: 150px;
+
+ }
 
   @media (max-width: 1200px) {
    .mainLay{
-    max-width: 970px;
+    max-width: 770px;
    }
   }
 
   @media (max-width: 992px) {
    .mainLay{
-    max-width: 750px;
+    max-width: 550px;
    }
   }
 
-  @media (max-width: 767px) {
+  @media (max-width: 600px) {
    .mainLay{
     max-width: none;
    }

@@ -1,30 +1,26 @@
-
 export interface listState {
-    text: string[],
-    done: boolean
+  text: string[];
+  done: boolean;
 }
 
-export enum ListActionTypes{
-    ADD = "ADD",
-    DELETE = "DELETE",
-    CHECK = "CHECK"
+export enum ListActionTypes {
+  ADD = "ADD",
+  DELETE = "DELETE",
+  CHECK = "CHECK",
 }
 
 interface AddCaseAction {
-    type: ListActionTypes.ADD,
-    payload: string
+  type: ListActionTypes.ADD;
+  payload: string;
 }
 
 interface DeleteCaseAction {
-    type: ListActionTypes.DELETE
-    payload: number
+  type: ListActionTypes.DELETE;
+  payload: number;
 }
 
 interface CheckCaseAction {
-    type: ListActionTypes.CHECK
+  type: ListActionTypes.CHECK;
 }
 
-export type ListAction =
-    AddCaseAction
-    |DeleteCaseAction
-    |CheckCaseAction
+export type ListAction = AddCaseAction | DeleteCaseAction | CheckCaseAction;

@@ -1,12 +1,12 @@
 //hook для обработки полей ввода(input)
-import {useState} from "react";
+import { useState } from "react";
 
 export const useInput = (initialValue) => {
-    const [value, setValue] = useState(initialValue)
+  const [value, setValue] = useState(initialValue);
 
-    const onChange = (e: React.ChangeEvent<HTMLInputElement>) =>{
-        setValue(e.target.value)
-    }
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setValue(e.target.value);
+  };
 
-    return{value, onChange}
-}
+  return { value, onChange };
+};

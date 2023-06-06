@@ -1,133 +1,131 @@
 // страница списка друзей
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from "react";
 import MainLayouts from "@/layouts/MainLayouts";
-import {useTypedSelector} from "../../hooks/useTypedSelector";
-import {NextThunkDispatch, wrapper} from "../../store";
-import {addUser, fetchUser} from "../../store/actions-creators/user";
-import {useActions} from "@/hooks/useActions";
+import { useTypedSelector } from "../../hooks/useTypedSelector";
+import { NextThunkDispatch, wrapper } from "../../store";
+import { addUser, fetchUser } from "../../store/actions-creators/user";
+import { useActions } from "@/hooks/useActions";
 import axios from "axios";
 import Friend from "@/components/Friend";
-import {useInput} from "@/hooks/useInput";
-import {Box, Button, Card, Grid, TextField} from "@mui/material";
+import { useInput } from "@/hooks/useInput";
+import { Box, Button, Card, Grid, TextField } from "@mui/material";
 
 interface IFriend {
-    _id : string
-    name: string,
-    list: string[]
+  _id: string;
+  name: string;
+  list: string[];
 }
 
 const Index = () => {
-    const {user, allUsers} = useTypedSelector(state => state.user)
+  const { user, allUsers } = useTypedSelector((state) => state.user);
 
-    const [friendsId, setFriendsId] = useState<IFriend[]>([]);
-    const {addUser} = useActions()
+  const [friendsId, setFriendsId] = useState<IFriend[]>([]);
+  const { addUser } = useActions();
 
-    const friendInp = useInput('')
+  const friendInp = useInput("");
 
-    const url_id = 'http://localhost:3000/client/' + user._id;
+  const url_id = "http://localhost:3000/client/" + user._id;
 
-    useEffect(
-        ()=>{
-               getUser()
-        },
-        [user]
-    );
+  useEffect(() => {
+    getUser();
+  }, [user]);
 
-
-    const getUser =  () => {
-          let preFriends : IFriend[] = [];
-          user.friends.forEach((friendId)=>{
-              allUsers.forEach((user)=>{
-                if (friendId == user._id) {
-                    preFriends.push({_id:user._id, name:user.name, list:user.list})
-                }
-                  setFriendsId(preFriends)
-            })
-
-        })
-    }
-
-    const addFriend = () => {
-        if (friendInp.value != user.teg ){      //проверка на добавление самого себя в друзья
-            allUsers.forEach((userFE,index)=>{
-                if (friendInp.value == userFE.teg && !user.friends.includes(userFE._id)) { //...&& не является ли уже другом
-                    let newListFriend: string[] = [...user.friends];
-                    newListFriend.push(userFE._id);
-                    updateFriends(newListFriend)
-                }
-            })
+  const getUser = () => {
+    let preFriends: IFriend[] = [];
+    user.friends.forEach((friendId) => {
+      allUsers.forEach((user) => {
+        if (friendId == user._id) {
+          preFriends.push({ _id: user._id, name: user.name, list: user.list });
         }
+        setFriendsId(preFriends);
+      });
+    });
+  };
 
-    }
-
-    const deletFriend = (idFriend) => {
-        user.friends.forEach((friend,index)=>{
-            if (idFriend == friend) {
-                let newListFriend: string[] = [...user.friends];
-                newListFriend.splice(index,1);
-                updateFriends(newListFriend)
-            }
-        })
-    }
-
-
-
-    const updateFriends = (newFriend:string[]) => {
-        try {
-            axios.put(url_id,{
-                    "case":user.list,
-                    "friend": newFriend
-                }
-            ).then(response => {addUser(response.data)});
-        }catch (e){
-            console.log(e)
+  const addFriend = () => {
+    if (friendInp.value != user.teg) {
+      //проверка на добавление самого себя в друзья
+      allUsers.forEach((userFE, index) => {
+        if (
+          friendInp.value == userFE.teg &&
+          !user.friends.includes(userFE._id)
+        ) {
+          //...&& не является ли уже другом
+          let newListFriend: string[] = [...user.friends];
+          newListFriend.push(userFE._id);
+          updateFriends(newListFriend);
         }
+      });
     }
+  };
 
-    const FriendsComponent = friendsId.map((element, index)=>
-        <div key={index}>
-            <Friend key={index} name={element.name}
-                    list={element.list} code={index}
-                    _id={element._id} cbDeletFriend={deletFriend}
-            />
-            <br/>
-        </div>
+  const deletFriend = (idFriend) => {
+    user.friends.forEach((friend, index) => {
+      if (idFriend == friend) {
+        let newListFriend: string[] = [...user.friends];
+        newListFriend.splice(index, 1);
+        updateFriends(newListFriend);
+      }
+    });
+  };
 
-    )
+  const updateFriends = (newFriend: string[]) => {
+    try {
+      axios
+        .put(url_id, {
+          case: user.list,
+          friend: newFriend,
+        })
+        .then((response) => {
+          addUser(response.data);
+        });
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
-    return (
+  const FriendsComponent = friendsId.map((element, index) => (
+    <div key={index}>
+      <Friend
+        key={index}
+        name={element.name}
+        list={element.list}
+        code={index}
+        _id={element._id}
+        cbDeletFriend={deletFriend}
+      />
+      <br />
+    </div>
+  ));
+
+  return (
     <MainLayouts>
-        <Grid container justifyContent={'center'}>
-            <Card style={{width:900}}>
-                <Box p={3}>
-                    <Grid>
-                        <h1>Друзья</h1>
-                        <TextField
-                            {...friendInp}
-                            style={{marginTop: 10}}
-                            label={"Логин"}
-                        />
-                        <Button onClick={addFriend}>Добавить друга</Button>
-                        {FriendsComponent}
-                    </Grid>
-                </Box>
-            </Card>
-        </Grid>
+      <Grid container justifyContent={"center"}>
+        <Card style={{ width: 900 }}>
+          <Box p={3}>
+            <Grid>
+              <h1>Друзья</h1>
+              <TextField
+                {...friendInp}
+                style={{ marginTop: 10 }}
+                label={"Логин"}
+              />
+              <Button onClick={addFriend}>Добавить друга</Button>
+              {FriendsComponent}
+            </Grid>
+          </Box>
+        </Card>
+      </Grid>
     </MainLayouts>
-
-    );
+  );
 };
 export default Index;
 
 export const getServerSideProps = wrapper.getServerSideProps(
-    store => async ( ) =>
-    {
-        const dispatch = store.dispatch as NextThunkDispatch;
-        await dispatch(fetchUser());
+  (store) => async () => {
+    const dispatch = store.dispatch as NextThunkDispatch;
+    await dispatch(fetchUser());
 
-        return { props: {} }
-    }
+    return { props: {} };
+  }
 );
-
-
-

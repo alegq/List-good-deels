@@ -24,7 +24,8 @@ const Index = () => {
 
   const friendInp = useInput("");
 
-  const url_id = "http://localhost:3000/client/" + user._id;
+  const url = "http://localhost:3000/client/";
+  const url_friend_teg = url + "friend/";
 
   useEffect(() => {
     getUser();
@@ -33,29 +34,34 @@ const Index = () => {
   const getUser = () => {
     let preFriends: IFriend[] = [];
     user.friends.forEach((friendId) => {
-      allUsers.forEach((user) => {
-        if (friendId == user._id) {
-          preFriends.push({ _id: user._id, name: user.name, list: user.list });
-        }
+      axios.get(url + friendId).then((response) => {
+        let dataFriend = response.data;
+        preFriends.push({
+          _id: dataFriend._id,
+          name: dataFriend.name,
+          list: dataFriend.list,
+        });
         setFriendsId(preFriends);
       });
     });
   };
 
   const addFriend = () => {
+    //проверка на добавление самого себя в друзья
     if (friendInp.value != user.teg) {
-      //проверка на добавление самого себя в друзья
-      allUsers.forEach((userFE, index) => {
-        if (
-          friendInp.value == userFE.teg &&
-          !user.friends.includes(userFE._id)
-        ) {
-          //...&& не является ли уже другом
-          let newListFriend: string[] = [...user.friends];
-          newListFriend.push(userFE._id);
-          updateFriends(newListFriend);
-        }
-      });
+      try {
+        axios.get(url_friend_teg + friendInp.value).then((response) => {
+          let dataFriend = response.data[0];
+          //проверка не добавлялся ли друг ранее
+          if (!user.friends.includes(dataFriend._id)) {
+            let newListFriend: string[] = [...user.friends];
+            newListFriend.push(dataFriend._id);
+            updateFriends(newListFriend);
+          }
+        });
+      } catch (e) {
+        console.log(e);
+      }
     }
   };
 
@@ -72,7 +78,7 @@ const Index = () => {
   const updateFriends = (newFriend: string[]) => {
     try {
       axios
-        .put(url_id, {
+        .put(url + user._id, {
           case: user.list,
           friend: newFriend,
         })
@@ -120,12 +126,3 @@ const Index = () => {
   );
 };
 export default Index;
-
-export const getServerSideProps = wrapper.getServerSideProps(
-  (store) => async () => {
-    const dispatch = store.dispatch as NextThunkDispatch;
-    await dispatch(fetchUser());
-
-    return { props: {} };
-  }
-);

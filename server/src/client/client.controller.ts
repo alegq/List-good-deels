@@ -37,6 +37,11 @@ export class ClientController {
     return this.clientServise.getOne(id);
   }
 
+  @Get('/friend/:teg')
+  getFriend(@Param('teg') teg: string) {
+    return this.clientServise.getFriend(teg);
+  }
+
   @Post('/login')
   @UsePipes(new ValidationPipe())
   getOneLog(@Body() dto: LogPasswdDto) {
